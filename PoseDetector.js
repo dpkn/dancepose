@@ -3,10 +3,12 @@ import * as posenet from '@tensorflow-models/posenet';
 
 export default class PoseDetector{
 
-    constructor(){
+    constructor(callback){
         this.videoWidth = 600;
         this.videoHeight = 500;
         this.asyncSetup();
+
+        this.callback = callback;
     }
 
     async asyncSetup() {
@@ -22,10 +24,13 @@ export default class PoseDetector{
         // multiplier: 0.75
       });
     
+      console.log('Model loaded');
+
       try {
         this.video = await this.setupCamera();
         this.video.play();
-  
+        console.log('video started playing');
+        this.callback();
       } catch (e) {
         let info = document.getElementById('info');
         info.textContent = 'this browser does not support video capture,' +
@@ -65,6 +70,9 @@ export default class PoseDetector{
 
       async poseDetectionFrame() {
 
+        if(!this.net)
+        return false;
+
         let poses = [];
     
         // if(replaying){
@@ -75,7 +83,7 @@ export default class PoseDetector{
         // }else{
     
           let all_poses = await this.net.estimatePoses(video, {
-            flipHorizontal: flipPoseHorizontal,
+            flipHorizontal: true,
             decodingMethod: 'multi-person',
             maxDetections: 2,
             scoreThreshold: 0.1,

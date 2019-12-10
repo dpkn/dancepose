@@ -1,65 +1,98 @@
 export default class PoseDrawer {
-    constructor(canvasContext) {
-        console.log('boop')
+    constructor(canvas) {
 
-        this.ctx = canvasContext;
-        
+        this.ctx = canvas.getContext('2d');
+        this.videoWidth = 600;
+        this.videoHeight = 500;
+    
     }
 
-    drawFrame(){
-        this.ctx.clearRect(0, 0, videoWidth, videoHeight);
+    drawFrame(posesOg){
+
+        let poses = JSON.parse(JSON.stringify(posesOg))
+
+        this.ctx.clearRect(0, 0, 1920, 1080);
+         poses.forEach(({score, keypoints}) => {
+          if (score >= 0.2) {
+            
+              // Remove hips and shoulders from skeleton,
+              // use only center of both for stick-figure look
+              let head = keypoints.splice(1,4);
+              let shoulders = keypoints.splice(1,2);
+              let hips = keypoints.splice(5,2);
     
-        this.ctx.save();
-        this.ctx.scale(-1, 1);
-        this.ctx.translate(-this.videoWidth, 0);
-       // this.ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-        this.ctx.restore();
+              keypoints.push({
+                score: ( shoulders[0].score + shoulders[1].score )/ 2,
+                part: "middleShoulder",
+                position:{
+                  x: ( shoulders[0].position.x + shoulders[1].position.x )/ 2,
+                  y: ( shoulders[0].position.y + shoulders[1].position.y )/ 2,
+                }
+              })
+              keypoints.push({
+                score: ( hips[0].score + hips[1].score )/ 2,
+                part: "middleHip",
+                position:{
+                  x: ( hips[0].position.x + hips[1].position.x )/ 2,
+                  y: ( hips[0].position.y + hips[1].position.y )/ 2,
+                }
+              })
+           
+              keypoints.push(head[0]);
+              keypoints.push(head[1]);
+    
+    
+              this.drawSkeleton(keypoints, 0.15);
+          }
+        });
     }
 
     /*
     * Draws a pose skeleton by looking up all adjacent keypoints/joints
     */
-    drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
+    drawSkeleton(keypoints, scale = 1) {
+        let color = '#fff';
 
         // Middle stick
-        drawSegment(toTuple(keypoints[9].position), toTuple(keypoints[10].position), color, scale, ctx);
+        this.drawSegment(this.toTuple(keypoints[9].position), this.toTuple(keypoints[10].position), color, scale, this.ctx);
 
         // Left arm
-        drawSegment(toTuple(keypoints[1].position), toTuple(keypoints[3].position), color, scale, ctx);
-        drawSegment(toTuple(keypoints[1].position), toTuple(keypoints[9].position), color, scale, ctx);
+        this.drawSegment(this.toTuple(keypoints[1].position), this.toTuple(keypoints[3].position), color, scale, this.ctx);
+        this.drawSegment(this.toTuple(keypoints[1].position), this.toTuple(keypoints[9].position), color, scale, this.ctx);
 
         // Right arm
-        drawSegment(toTuple(keypoints[2].position), toTuple(keypoints[4].position), color, scale, ctx);
-        drawSegment(toTuple(keypoints[2].position), toTuple(keypoints[9].position), color, scale, ctx);
+        this.drawSegment(this.toTuple(keypoints[2].position), this.toTuple(keypoints[4].position), color, scale, this.ctx);
+        this.drawSegment(this.toTuple(keypoints[2].position), this.toTuple(keypoints[9].position), color, scale, this.ctx);
 
         // Left leg
-        drawSegment(toTuple(keypoints[5].position), toTuple(keypoints[7].position), color, scale, ctx);
-        drawSegment(toTuple(keypoints[5].position), toTuple(keypoints[10].position), color, scale, ctx);
+        this.drawSegment(this.toTuple(keypoints[5].position), this.toTuple(keypoints[7].position), color, scale, this.ctx);
+        this.drawSegment(this.toTuple(keypoints[5].position), this.toTuple(keypoints[10].position), color, scale, this.ctx);
 
         // Right leg
-        drawSegment(toTuple(keypoints[6].position), toTuple(keypoints[8].position), color, scale, ctx);
-        drawSegment(toTuple(keypoints[6].position), toTuple(keypoints[10].position), color, scale, ctx);
+        this.drawSegment(this.toTuple(keypoints[6].position), this.toTuple(keypoints[8].position), color, scale, this.ctx);
+        this.drawSegment(this.toTuple(keypoints[6].position), this.toTuple(keypoints[10].position), color, scale, this.ctx);
 
-        //Neck
-        drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[9].position), color, scale, ctx);
-
+        // Neck
+        let neckX = keypoints[0].position.x;
+        let neckY = keypoints[0].position.y+40;
+        this.drawSegment([neckY,neckX], this.toTuple(keypoints[9].position), color, scale, this.ctx);
+   
         // Draw head
         this.ctx.beginPath();
         this.ctx.arc(keypoints[0].position.x, keypoints[0].position.y, 40, 0, 2 * Math.PI);
-        this.ctx.fillStyle = '#fff';
-        this.ctx.fill();
-        this.ctx.strokeStyle = '#000';
+
+        this.ctx.strokeStyle = color;
         this.ctx.stroke();
 
         // Draw Eyes
         this.ctx.beginPath();
         this.ctx.arc(keypoints[11].position.x, keypoints[11].position.y, 10, 0, 2 * Math.PI);
-        this.ctx.fillStyle = '#000';
+        this.ctx.fillStyle = color;
         this.ctx.fill();
 
         this.ctx.beginPath();
         this.ctx.arc(keypoints[12].position.x, keypoints[12].position.y, 10, 0, 2 * Math.PI);
-        this.ctx.fillStyle = '#000';
+        this.ctx.fillStyle = color;
         this.ctx.fill();
 
     }
@@ -67,10 +100,10 @@ export default class PoseDrawer {
     /*
      * Draws a line on a canvas, i.e. a joint
      */
-    drawSegment([ay, ax], [by, bx], color, scale, ctx) {
+    drawSegment([ay, ax], [by, bx], color, scale) {
         this.ctx.beginPath();
-        this.ctx.moveTo(ax * scale, ay * scale);
-        this.ctx.lineTo(bx * scale, by * scale);
+        this.ctx.moveTo(ax, ay);
+        this.ctx.lineTo(bx, by);
         this.ctx.lineWidth = 10;
         this.ctx.strokeStyle = color;
         this.ctx.stroke();
