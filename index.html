@@ -5,18 +5,22 @@
     <title>Dancing Bloppie</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="animate.css">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
 
-    <video id="video" playsinline style="transform: scaleX(-1);" >
+
+    <video id="video" playsinline style="transform: scaleX(-1);">
     </video>
+
     <canvas id="output"></canvas>
+    <h1 id="count-down"></h1>
 
     <div class="buttons">
         <button id="record-button">Start Recording</button>
-        <button  id="replay-button">Replay</button>
+        <button id="replay-button">Replay</button>
     </div>
 
     <script src="main.js"></script>

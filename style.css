@@ -1,34 +1,49 @@
-*,*::after,*::before{
-    box-sizing: border-box;
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
 }
 
-html,body{
-    width: 100%;
-    height:100%;
-    top:0;
-    left:0;
-    margin:0;
-    padding: 0;
+html,
+body {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  color:#fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-body{
-    background:linear-gradient(#c0392b, #8e44ad);
+body {
+  background: linear-gradient(#c0392b, #8e44ad);
+  background: #191919;
+}
+#output{
+  /* background:#121212; */
 }
 
-#output,#video{
-    position: absolute;
-    top:0;
-    left:0;
-    width:100%;
+#output,
+#video {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
-#video{
-    height: 100%;
+#video {
 }
 
-.buttons{
-    position: absolute;
-    z-index: 99;
-    bottom:0;
-    margin: 50px;
+.buttons {
+  position: absolute;
+  z-index: 99;
+  bottom: 0;
+  margin: 50px;
+}
 
+#count-down{
+position: absolute;
+top:50px;
+width:100%;
+text-align: center;
+font-size: 5em;
 }
