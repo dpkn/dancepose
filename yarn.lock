@@ -4791,9 +4791,9 @@ path-key@^2.0.1:
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-type@^1.0.0:
   version "1.1.0"
@@ -6336,6 +6336,11 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
+
+two.js@^0.7.0-beta.3:
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/two.js/-/two.js-0.7.8.tgz#a7379b1bb99127d06b2798eb39e5e96f629c4340"
+  integrity sha512-zUD4BqXKASCZT3/l8jvjaV1K/7PixUB63HWCdWrUN7abOolUfHmnuq8yhHGupClszEk5uzJelPn2O1fcHWLj3w==
 
 type-check@~0.3.2:
   version "0.3.2"
